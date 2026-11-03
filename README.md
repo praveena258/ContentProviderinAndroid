@@ -1,5 +1,5 @@
 
-# Ex.No:3 Create Your Own Content Providers to get Contacts details.
+# Ex.No:4 Create Your Own Content Providers to get Contacts details.
 
 
 ## AIM:
@@ -30,13 +30,166 @@ Step 7: Save and run the application.
 ```
 /*
 Program to print the text create your own content providers to get contacts details.
-Developed by:
-Registeration Number :
+Developed by: PRAVEENA D
+Registeration Number : 212224040248
 */
 ```
+activity_main.xml
+```
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Experiment 04 - Get Contacts"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.176" />
+
+    <Button
+        android:id="@+id/btnContacts"
+        android:layout_width="317dp"
+        android:layout_height="48dp"
+        android:text="Get Contacts"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.163" />
+
+    <TextView
+        android:id="@+id/txtContacts"
+        android:layout_width="367dp"
+        android:layout_height="248dp"
+        android:paddingTop="20dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnContacts"
+        app:layout_constraintVertical_bias="0.141" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+MainActivity.java
+```
+package com.example.gallery;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button btnContacts;
+    TextView txtContacts;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        btnContacts = findViewById(R.id.btnContacts);
+        txtContacts = findViewById(R.id.txtContacts);
+
+        ActivityCompat.requestPermissions(
+                this,
+                new String[]{Manifest.permission.READ_CONTACTS},
+                1
+        );
+
+        btnContacts.setOnClickListener(v -> getContacts());
+    }
+
+    @SuppressLint("Range")
+    private void getContacts() {
+
+        Cursor c = getContentResolver().query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+
+        StringBuilder s = new StringBuilder();
+
+        assert c != null;
+
+        while (c.moveToNext()) {
+
+            String name = c.getString(
+                    c.getColumnIndex(
+                            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+
+            String number = c.getString(
+                    c.getColumnIndex(
+                            ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+            s.append(name)
+                    .append(" : ")
+                    .append(number)
+                    .append("\n\n");
+        }
+
+        txtContacts.setText(s.toString());
+
+        c.close();
+    }
+}
+```
+Androidmanifest.xml
+```
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Gallery">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+```
 ## OUTPUT
 
+<img width="1917" height="1105" alt="image" src="https://github.com/user-attachments/assets/28dedef0-4289-4b5e-8c9d-c3a035f64ef4" />
+<img width="1917" height="1092" alt="image" src="https://github.com/user-attachments/assets/2e2f798c-16be-41fa-b363-4c3f8b0b4a56" />
+<img width="1917" height="1080" alt="image" src="https://github.com/user-attachments/assets/20272a97-03bc-4a6c-8527-2d0cae3e7d0a" />
 
 
 
